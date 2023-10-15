@@ -23,6 +23,23 @@ router.post('/cadastrar',conectarBancoDados,  async function(req, res) {
     return tratarErrosEsperados(res, error);
   }
 });
+router.get('/obter/livro',conectarBancoDados,  async function(req, res) {
+  try {
+    // #swagger.tags = ['Livro']
+    // #swagger.description = 'Endpoint para obter todos os livros'
+    const respostaBD = await EsquemaBook.find();
+    res.status(200).json({
+    status: "OK",
+    statusMensagem: "Livros obtidos com sucesso",
+    resposta: respostaBD
+    })
+
+  }  catch (error) {
+    if(String(error).includes("dup key")){
+      return tratarErrosEsperados(res, 'Error: Já existe um livro com esse ISBN')
+    }
+    return tratarErrosEsperados(res, error);
+  }});
 
 router.put('/editar/:id', conectarBancoDados, async function (req, res) {
   try {
